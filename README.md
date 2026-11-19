@@ -38,8 +38,18 @@ stays on the phone unless you export it.
    or connect via USB and run `adb install app-release.apk`.
 3. Allow notifications when asked; reminders depend on them.
 
-The release build is signed with the local debug key, which suits a
-personal install. Use your own keystore before distributing it.
+Release builds are signed with the key named in
+`~/.gradle/gradle.properties`:
+
+```properties
+MONTHLY_KEYSTORE=/path/to/monthly-release.jks
+MONTHLY_KEYSTORE_PASSWORD=...
+MONTHLY_KEY_ALIAS=monthly
+```
+
+Without these properties Gradle builds `app-release-unsigned.apk`.
+Android installs an update only when it carries the same signature, so
+keep a backup of the keystore and its password.
 
 ## Build
 

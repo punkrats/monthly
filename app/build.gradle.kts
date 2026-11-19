@@ -18,6 +18,22 @@ android {
     versionName = "0.1.0"
   }
 
+  // The release key lives outside the repo; its path and password come
+  // from ~/.gradle/gradle.properties. Without them the release APK is
+  // left unsigned.
+  fun property(name: String) =
+    providers.gradleProperty(name).orNull?.takeIf { it.isNotBlank() }
+
+  val release = property("MONTHLY_KEYSTORE")?.let { path ->
+    signingConfigs.create("release") {
+      val password = property("MONTHLY_KEYSTORE_PASSWORD")
+      storeFile = file(path)
+      storePassword = password
+      keyAlias = property("MONTHLY_KEY_ALIAS")
+      keyPassword = password
+    }
+  }
+
   buildTypes {
     release {
       isMinifyEnabled = true
@@ -26,10 +42,7 @@ android {
         getDefaultProguardFile("proguard-android-optimize.txt"),
         "proguard-rules.pro"
       )
-
-      // Personal sideload build: signed with the local debug key so the
-      // optimised APK installs without a separate keystore.
-      signingConfig = signingConfigs.getByName("debug")
+      signingConfig = release
     }
   }
 
