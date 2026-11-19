@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- General -->
+  <string name="today">Heute</string>
+  <string name="tomorrow">Morgen</string>
+  <string name="yesterday">Gestern</string>
+  <string name="untitled">(Ohne Titel)</string>
+  <string name="search">Suchen</string>
+  <string name="settings">Einstellungen</string>
+  <string name="new_event">Neuer Termin</string>
+  <string name="back">Zurück</string>
+  <string name="close">Schließen</string>
+  <string name="ok">OK</string>
+  <string name="cancel">Abbrechen</string>
+  <string name="save">Speichern</string>
+  <string name="delete">Löschen</string>
+  <string name="edit">Bearbeiten</string>
+  <string name="undo">Rückgängig</string>
+  <string name="remove">Entfernen</string>
+  <string name="less">Weniger</string>
+  <string name="more">Mehr</string>
+  <string name="none">Keine</string>
+  <string name="on">An</string>
+  <string name="off_tap">Aus. Tippen zum Einschalten.</string>
+  <string name="deleted">Gelöscht</string>
+
+  <!-- Notifications -->
+  <string name="channel_events">Terminerinnerungen</string>
+  <string name="channel_birthdays">Geburtstagserinnerungen</string>
+  <string name="birthday_turns">%1$s wird %2$d</string>
+  <string name="birthday_of">Geburtstag von %1$s</string>
+  <string name="clock_there_here">%1$s in %2$s, %3$s hier</string>
+
+  <!-- Month grid and day panel -->
+  <string name="cd_cycle_start">Zyklusbeginn</string>
+  <string name="cd_expected_start">Erwarteter Zyklusbeginn</string>
+  <plurals name="entries">
+    <item quantity="one">%d Eintrag</item>
+    <item quantity="other">%d Einträge</item>
+  </plurals>
+  <string name="nothing_planned">Nichts geplant</string>
+  <string name="all_day">Ganztägig</string>
+  <string name="turns_age">Wird %d</string>
+  <string name="time_in">%1$s in %2$s</string>
+  <string name="zone_now">%1$s, jetzt %2$s</string>
+  <string name="cycle_started">Periode begonnen</string>
+  <string name="cycle_remove">Beginn entfernen</string>
+  <string name="cycle_saved">Zyklusbeginn am %s gespeichert</string>
+  <string name="cycle_removed">Zyklusbeginn am %s entfernt</string>
+  <string name="cycle_day">Zyklustag %d</string>
+  <string name="cycle_next">Nächster Beginn erwartet am %1$s (%2$s)</string>
+  <plurals name="cycle_average">
+    <item quantity="one">Durchschnitt %d Tag</item>
+    <item quantity="other">Durchschnitt %d Tage</item>
+  </plurals>
+  <string name="cycle_hint">Markiere einen weiteren Zyklusbeginn für eine Vorhersage</string>
+  <string name="cycle_start">Zyklusbeginn</string>
+  <string name="notifications_off">Benachrichtigungen sind aus, Erinnerungen erreichen dich daher nicht.</string>
+  <string name="turn_on">Einschalten</string>
+
+  <!-- Event details -->
+  <string name="span_in">%1$s - %2$s in %3$s</string>
+  <string name="their_zone">Zeitzone dort: %s</string>
+  <string name="their_zone_now">Zeitzone dort: %1$s, jetzt %2$s</string>
+  <string name="their_day">Der Tag dort: %1$s bis %2$s deiner Zeit</string>
+  <string name="delete_repeating">Wiederholenden Termin löschen</string>
+  <string name="delete_this">Nur diesen</string>
+  <string name="delete_all">Alle</string>
+
+  <!-- Editor -->
+  <string name="new_entry">Neu</string>
+  <string name="edit_entry">Bearbeiten</string>
+  <string name="kind_event">Termin</string>
+  <string name="kind_birthday">Geburtstag</string>
+  <string name="title">Titel</string>
+  <string name="name">Name</string>
+  <string name="title_required">Bitte gib einen Titel ein</string>
+  <string name="starts">Beginn</string>
+  <string name="ends">Ende</string>
+  <string name="time_zone">Zeitzone</string>
+  <string name="repeat">Wiederholen</string>
+  <string name="birthday_date">Geburtstag</string>
+  <string name="include_year">Geburtsjahr angeben</string>
+  <string name="their_time_zone">Zeitzone der Person</string>
+  <string name="same_as_mine">Wie meine</string>
+  <string name="reminders">Erinnerungen</string>
+  <string name="add_reminder">Erinnerung hinzufügen</string>
+  <string name="next_alert">Nächste: %s</string>
+  <string name="next_alert_zoned">Nächste: %1$s hier, %2$s in %3$s</string>
+  <string name="location">Ort</string>
+  <string name="notes">Notizen</string>
+
+  <!-- Reminders -->
+  <string name="reminder_at_start">Zu Beginn</string>
+  <plurals name="reminder_minutes">
+    <item quantity="one">%d Minute vorher</item>
+    <item quantity="other">%d Minuten vorher</item>
+  </plurals>
+  <plurals name="reminder_hours">
+    <item quantity="one">%d Stunde vorher</item>
+    <item quantity="other">%d Stunden vorher</item>
+  </plurals>
+  <plurals name="reminder_days">
+    <item quantity="one">%d Tag vorher</item>
+    <item quantity="other">%d Tage vorher</item>
+  </plurals>
+  <plurals name="reminder_weeks">
+    <item quantity="one">%d Woche vorher</item>
+    <item quantity="other">%d Wochen vorher</item>
+  </plurals>
+  <string name="reminder_on_the_day">Am Tag selbst</string>
+  <string name="reminder_at">%1$s um %2$s</string>
+  <string name="their_time">Uhrzeit dort</string>
+  <string name="my_time">Meine Uhrzeit</string>
+
+  <!-- Repeat rules -->
+  <string name="repeat_none">Keine Wiederholung</string>
+  <plurals name="every_day">
+    <item quantity="one">Jeden Tag</item>
+    <item quantity="other">Alle %d Tage</item>
+  </plurals>
+  <plurals name="every_week">
+    <item quantity="one">Jede Woche</item>
+    <item quantity="other">Alle %d Wochen</item>
+  </plurals>
+  <plurals name="every_month">
+    <item quantity="one">Jeden Monat</item>
+    <item quantity="other">Alle %d Monate</item>
+  </plurals>
+  <plurals name="every_year">
+    <item quantity="one">Jedes Jahr</item>
+    <item quantity="other">Alle %d Jahre</item>
+  </plurals>
+  <string name="repeat_on">am %s</string>
+  <string name="repeat_on_day">am %d.</string>
+  <string name="repeat_on_nth">am %1$s %2$s</string>
+  <string name="repeat_in_month">%1$s im %2$s</string>
+  <string name="repeat_until">bis %s</string>
+  <plurals name="times">
+    <item quantity="one">%d Mal</item>
+    <item quantity="other">%d Mal</item>
+  </plurals>
+  <string-array name="ordinals">
+    <item>ersten</item>
+    <item>zweiten</item>
+    <item>dritten</item>
+    <item>vierten</item>
+    <item>fünften</item>
+  </string-array>
+  <string name="ordinal_last">letzten</string>
+  <string name="freq_daily">Täglich</string>
+  <string name="freq_weekly">Wöchentlich</string>
+  <string name="freq_monthly">Monatlich</string>
+  <string name="freq_yearly">Jährlich</string>
+  <string name="ends_never">Endet nie</string>
+  <string name="ends_on">Endet am</string>
+  <string name="ends_after">Endet nach</string>
+
+  <!-- Agenda and pickers -->
+  <string name="search_events">Termine suchen</string>
+  <string name="nothing_found">Nichts gefunden</string>
+  <string name="search_zones">Stadt oder Region suchen</string>
+
+  <!-- Settings -->
+  <string name="section_calendar">Kalender</string>
+  <string name="week_starts">Woche beginnt am</string>
+  <string name="locale_default">Gerätestandard</string>
+  <string name="default_reminder">Standarderinnerung für Termine</string>
+  <string name="birthday_time">Uhrzeit für Geburtstagserinnerungen</string>
+  <string name="section_cycle">Zyklus</string>
+  <string name="cycle_tracking">Zyklus verfolgen</string>
+  <string name="cycle_tracking_hint">Schattiert die Tage vor dem nächsten erwarteten Beginn, berechnet aus dem Durchschnitt deiner letzten 3 regelmäßigen Zyklen. Lücken durch einen vergessenen Eintrag oder doppeltes Tippen werden übersprungen.</string>
+  <string name="lead_days">Schattierte Tage vor dem Beginn</string>
+  <string name="section_data">Import und Export</string>
+  <string name="import_file">.ics-Datei importieren</string>
+  <string name="import_hint">Termine, Geburtstage und Zyklusdaten aus jeder Kalender-App</string>
+  <string name="export_file">.ics-Datei exportieren</string>
+  <string name="export_hint">Alle Einträge als iCalendar-Datei</string>
+  <string name="export_title">Kalender exportieren</string>
+  <string name="include_cycle">Zyklusdaten einschließen</string>
+  <string name="include_cycle_hint">Zyklusdaten sind Gesundheitsdaten. Lass das aus, wenn du die Datei teilst.</string>
+  <string name="export_confirm">Exportieren</string>
+  <plurals name="exported">
+    <item quantity="one">%d Eintrag exportiert</item>
+    <item quantity="other">%d Einträge exportiert</item>
+  </plurals>
+  <string name="export_failed">Export fehlgeschlagen</string>
+  <string name="import_title">Kalender importieren</string>
+  <plurals name="import_events">
+    <item quantity="one">%d Termin oder Geburtstag</item>
+    <item quantity="other">%d Termine und Geburtstage</item>
+  </plurals>
+  <plurals name="import_cycle">
+    <item quantity="one">%d Zyklusbeginn</item>
+    <item quantity="other">%d Zyklusbeginne</item>
+  </plurals>
+  <plurals name="import_simplified">
+    <item quantity="one">%d wiederholender Termin nutzt eine Regel, die diese App nicht darstellen kann, und wird als Einzeltermin übernommen</item>
+    <item quantity="other">%d wiederholende Termine nutzen Regeln, die diese App nicht darstellen kann, und werden als Einzeltermine übernommen</item>
+  </plurals>
+  <plurals name="import_unknown_zones">
+    <item quantity="one">%d unbekannte Zeitzone wird durch deine ersetzt</item>
+    <item quantity="other">%d unbekannte Zeitzonen werden durch deine ersetzt</item>
+  </plurals>
+  <string name="import_confirm">Importieren</string>
+  <string name="import_nothing">Keine Termine in dieser Datei gefunden</string>
+  <string name="import_unreadable">Diese Datei konnte nicht geöffnet werden</string>
+  <plurals name="imported">
+    <item quantity="one">%d Eintrag importiert</item>
+    <item quantity="other">%d Einträge importiert</item>
+  </plurals>
+  <string name="section_alerts">Erinnerungen</string>
+  <string name="notifications">Benachrichtigungen</string>
+  <string name="exact_alarms">Genaue Erinnerungszeiten</string>
+  <string name="exact_alarms_off">Aus, Erinnerungen können sich verspäten. Tippen zum Erlauben.</string>
+  <string name="about">Info</string>
+  <string name="about_text">Monthly %s. Alles bleibt auf diesem Gerät. Die App hat keinen Internetzugriff.</string>
+</resources>
