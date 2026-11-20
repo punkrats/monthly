@@ -1,6 +1,7 @@
 package app.monthly.data
 
 import android.content.Context
+import androidx.core.content.edit
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalTime
@@ -33,18 +34,18 @@ class SettingsStore(context: Context) {
     get() = prefs.getLong("last_check", 0).takeIf { it > 0 }
       ?.let { Instant.ofEpochMilli(it) }
     set(value) {
-      prefs.edit().putLong("last_check", value?.toEpochMilli() ?: 0).apply()
+      prefs.edit { putLong("last_check", value?.toEpochMilli() ?: 0) }
     }
 
   fun update(transform: (Settings) -> Settings) {
     val next = transform(state.value)
-    prefs.edit()
-      .putInt("week_start", next.weekStart?.value ?: 0)
-      .putBoolean("cycle_enabled", next.cycleEnabled)
-      .putInt("lead_days", next.leadDays)
-      .putInt("event_reminder", next.eventReminder ?: -1)
-      .putString("birthday_time", next.birthdayTime.toString())
-      .apply()
+    prefs.edit {
+      putInt("week_start", next.weekStart?.value ?: 0)
+      putBoolean("cycle_enabled", next.cycleEnabled)
+      putInt("lead_days", next.leadDays)
+      putInt("event_reminder", next.eventReminder ?: -1)
+      putString("birthday_time", next.birthdayTime.toString())
+    }
     state.value = next
   }
 

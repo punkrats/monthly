@@ -39,10 +39,11 @@ object Notifier {
 
   /** Without the permission the app shows a banner instead. */
   fun show(context: Context, alert: Alert, device: ZoneId) {
-    val permission = Manifest.permission.POST_NOTIFICATIONS
-    val state = ContextCompat.checkSelfPermission(context, permission)
-    val needed = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-    if (needed && state != PackageManager.PERMISSION_GRANTED) return
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      val permission = Manifest.permission.POST_NOTIFICATIONS
+      val state = ContextCompat.checkSelfPermission(context, permission)
+      if (state != PackageManager.PERMISSION_GRANTED) return
+    }
 
     val format = Format(context)
     val title = format.alertTitle(alert)

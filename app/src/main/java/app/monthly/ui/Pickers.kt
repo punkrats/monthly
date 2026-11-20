@@ -289,13 +289,14 @@ private fun ZoneRow(
   onClick: () -> Unit
 ) {
   ListItem(
-    headlineContent = { Text(title) },
-    supportingContent = { Text(detail) },
+    onClick = onClick,
     trailingContent = {
       if (selected) Icon(Icons.Filled.Check, null)
     },
-    modifier = Modifier.clickable(onClick = onClick)
-  )
+    supportingContent = { Text(detail) }
+  ) {
+    Text(title)
+  }
 }
 
 // Repeat rules

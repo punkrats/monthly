@@ -1,7 +1,6 @@
 package app.monthly.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -44,12 +43,13 @@ fun PickerRow(
   onClick: () -> Unit
 ) {
   ListItem(
-    headlineContent = { Text(label) },
-    supportingContent = value?.let { { Text(it) } },
+    onClick = onClick,
     leadingContent = { Icon(icon, contentDescription = null) },
-    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-    modifier = Modifier.clickable(onClick = onClick)
-  )
+    supportingContent = value?.let { { Text(it) } },
+    colors = ListItemDefaults.colors(containerColor = Color.Transparent)
+  ) {
+    Text(label)
+  }
 }
 
 @Composable
@@ -77,7 +77,7 @@ fun Stepper(
 }
 
 @Composable
-fun ColorDot(color: Color, size: Dp = 12.dp, modifier: Modifier = Modifier) {
+fun ColorDot(color: Color, modifier: Modifier = Modifier, size: Dp = 12.dp) {
   Box(
     modifier
       .size(size)

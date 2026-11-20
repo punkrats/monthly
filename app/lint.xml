@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+  <!-- aapt2 fails to link the adaptive icon from mipmap-anydpi, even
+       with minSdk 26, so the folder keeps its v26 qualifier. -->
+  <issue id="ObsoleteSdkInt">
+    <ignore path="src/main/res/mipmap-anydpi-v26" />
+  </issue>
+</lint>

@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.core.database.sqlite.transaction
 import app.monthly.ics.RRule
 import app.monthly.model.Event
 import app.monthly.model.EventColor
@@ -82,15 +83,10 @@ class Database(context: Context) :
 
   /** Same UID replaces the stored row, keeping its id. */
   fun upsertAll(events: List<Event>, cycle: List<LocalDate>) {
-    val db = writableDatabase
-    db.beginTransaction()
-    try {
-      val ids = idsByUid(db)
+    writableDatabase.transaction {
+      val ids = idsByUid(this)
       events.forEach { save(it.copy(id = ids[it.uid] ?: 0L)) }
       cycle.forEach { addCycleStart(it) }
-      db.setTransactionSuccessful()
-    } finally {
-      db.endTransaction()
     }
   }
 
@@ -106,14 +102,9 @@ class Database(context: Context) :
   }
 
   fun moveCycleStart(from: LocalDate, to: LocalDate) {
-    val db = writableDatabase
-    db.beginTransaction()
-    try {
+    writableDatabase.transaction {
       removeCycleStart(from)
       addCycleStart(to)
-      db.setTransactionSuccessful()
-    } finally {
-      db.endTransaction()
     }
   }
 

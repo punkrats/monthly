@@ -2,8 +2,6 @@ package app.monthly.ui
 
 import android.app.AlarmManager
 import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.provider.Settings as SystemSettings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,8 +16,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccessAlarm
-import androidx.compose.material.icons.outlined.CalendarViewWeek
 import androidx.compose.material.icons.outlined.Cake
+import androidx.compose.material.icons.outlined.CalendarViewWeek
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.FileUpload
 import androidx.compose.material.icons.outlined.Notifications
@@ -50,6 +48,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.monthly.BuildConfig
 import app.monthly.R
@@ -159,7 +158,9 @@ fun SettingsScreen(model: AppViewModel) {
           context.startActivity(intent)
         }
       }
-      if (!exact && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+
+      // Exact alarms can only be denied from API 31 on.
+      if (!exact) {
         item {
           PickerRow(
             Icons.Outlined.AccessAlarm,
@@ -168,7 +169,7 @@ fun SettingsScreen(model: AppViewModel) {
           ) {
             val action = SystemSettings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
             val intent = Intent(action)
-              .setData(Uri.parse("package:${context.packageName}"))
+              .setData("package:${context.packageName}".toUri())
             context.startActivity(intent)
           }
         }
@@ -217,10 +218,6 @@ private fun CycleSettings(model: AppViewModel, settings: Settings) {
   val transparent = ListItemDefaults.colors(containerColor = Color.Transparent)
   Column {
     ListItem(
-      headlineContent = { Text(stringResource(R.string.cycle_tracking)) },
-      supportingContent = {
-        Text(stringResource(R.string.cycle_tracking_hint))
-      },
       leadingContent = { Icon(Icons.Outlined.WaterDrop, null) },
       trailingContent = {
         Switch(
@@ -230,19 +227,25 @@ private fun CycleSettings(model: AppViewModel, settings: Settings) {
           }
         )
       },
+      supportingContent = {
+        Text(stringResource(R.string.cycle_tracking_hint))
+      },
       colors = transparent
-    )
+    ) {
+      Text(stringResource(R.string.cycle_tracking))
+    }
     if (!settings.cycleEnabled) return@Column
 
     ListItem(
-      headlineContent = { Text(stringResource(R.string.lead_days)) },
       trailingContent = {
         Stepper(settings.leadDays, 1..7, "${settings.leadDays}") { days ->
           model.updateSettings { it.copy(leadDays = days) }
         }
       },
       colors = transparent
-    )
+    ) {
+      Text(stringResource(R.string.lead_days))
+    }
   }
 }
 

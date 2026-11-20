@@ -2,13 +2,14 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
   alias(libs.plugins.android.application)
-  alias(libs.plugins.kotlin.android)
   alias(libs.plugins.kotlin.compose)
 }
 
 android {
   namespace = "app.monthly"
-  compileSdk = 35
+  compileSdk {
+    version = release(37) { minorApiLevel = 2 }
+  }
 
   defaultConfig {
     applicationId = "app.monthly"

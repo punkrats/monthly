@@ -197,7 +197,6 @@ private fun TextInput(
 @Composable
 private fun EventFields(state: EditorState, format: Format) {
   ListItem(
-    headlineContent = { Text(stringResource(R.string.all_day)) },
     trailingContent = {
       Switch(
         checked = state.allDay,
@@ -205,7 +204,9 @@ private fun EventFields(state: EditorState, format: Format) {
       )
     },
     colors = ListItemDefaults.colors(containerColor = Color.Transparent)
-  )
+  ) {
+    Text(stringResource(R.string.all_day))
+  }
   DateTimeRow(state, start = true, format)
   DateTimeRow(state, start = false, format)
 
@@ -266,7 +267,6 @@ private fun BirthdayFields(state: EditorState, format: Format) {
     state.dialog = EditorDialog.StartDate
   }
   ListItem(
-    headlineContent = { Text(stringResource(R.string.include_year)) },
     trailingContent = {
       Switch(
         checked = state.yearKnown,
@@ -274,7 +274,9 @@ private fun BirthdayFields(state: EditorState, format: Format) {
       )
     },
     colors = ListItemDefaults.colors(containerColor = Color.Transparent)
-  )
+  ) {
+    Text(stringResource(R.string.include_year))
+  }
 
   val zone = state.zone
   val zoneText = if (zone == null) {
@@ -300,17 +302,18 @@ private fun RemindersSection(state: EditorState, format: Format) {
 
   state.reminders.toList().forEach { reminder ->
     ListItem(
-      headlineContent = { Text(format.reminder(reminder, draft)) },
-      supportingContent = preview(state, reminder, format)
-        ?.let { { Text(it) } },
       leadingContent = { Icon(Icons.Outlined.Notifications, null) },
       trailingContent = {
         IconButton(onClick = { state.reminders.remove(reminder) }) {
           Icon(Icons.Outlined.Clear, stringResource(R.string.remove))
         }
       },
+      supportingContent = preview(state, reminder, format)
+        ?.let { { Text(it) } },
       colors = ListItemDefaults.colors(containerColor = Color.Transparent)
-    )
+    ) {
+      Text(format.reminder(reminder, draft))
+    }
   }
 
   TextButton(

@@ -63,7 +63,7 @@ fun EventSheet(model: AppViewModel, occurrence: Occurrence) {
       verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
       Row(verticalAlignment = Alignment.CenterVertically) {
-        ColorDot(color, 14.dp)
+        ColorDot(color, size = 14.dp)
         Spacer(Modifier.width(12.dp))
         Text(
           event.title.ifBlank { stringResource(R.string.untitled) },

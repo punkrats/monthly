@@ -57,7 +57,7 @@ keep a backup of the keystore and its password.
 
 ## Build
 
-Requirements: JDK 21 and the Android SDK (platform 35, build tools 35).
+Requirements: JDK 21 and the Android SDK (platform 37.2, build tools 36).
 
 ```sh
 export JAVA_HOME=$(mise where java@temurin-21.0.13+9.0.LTS)
