@@ -49,6 +49,10 @@ class Repository(context: Context, private val onChange: () -> Unit) {
     if (started) db.addCycleStart(date) else db.removeCycleStart(date)
   }
 
+  fun moveCycleStart(from: LocalDate, to: LocalDate) = write {
+    db.moveCycleStart(from, to)
+  }
+
   fun import(result: IcsImport) = write {
     db.upsertAll(result.events, result.cycleStarts)
   }

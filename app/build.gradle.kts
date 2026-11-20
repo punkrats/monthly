@@ -55,6 +55,11 @@ android {
     compose = true
     buildConfig = true
   }
+
+  // Robolectric needs the merged manifest and resources.
+  testOptions {
+    unitTests.isIncludeAndroidResources = true
+  }
 }
 
 kotlin {
@@ -75,4 +80,10 @@ dependencies {
   implementation(libs.compose.icons.extended)
 
   testImplementation(libs.junit)
+  testImplementation(libs.robolectric)
+  testImplementation(libs.androidx.test.core)
+  testImplementation(libs.androidx.test.junit)
+  testImplementation(platform(libs.compose.bom))
+  testImplementation(libs.compose.ui.test.junit4)
+  debugImplementation(libs.compose.ui.test.manifest)
 }

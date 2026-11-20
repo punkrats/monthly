@@ -49,13 +49,21 @@
   <string name="cycle_remove">Remove start</string>
   <string name="cycle_saved">Cycle start saved for %s</string>
   <string name="cycle_removed">Cycle start removed for %s</string>
+  <string name="cycle_moved">Cycle start moved to %s</string>
+  <string name="cycle_move_title">Move cycle start?</string>
+  <string name="cycle_move_text">A cycle started on %1$s. Move that start to %2$s, or begin a new cycle?</string>
+  <string name="cycle_move">Move</string>
+  <string name="cycle_new">New cycle</string>
   <string name="cycle_day">Cycle day %d</string>
   <string name="cycle_next">Next start expected %1$s (%2$s)</string>
   <plurals name="cycle_average">
     <item quantity="one">average %d day</item>
     <item quantity="other">average %d days</item>
   </plurals>
-  <string name="cycle_hint">Mark one more cycle start to see a forecast</string>
+  <plurals name="cycle_assumed">
+    <item quantity="one">assuming %d day</item>
+    <item quantity="other">assuming %d days</item>
+  </plurals>
   <string name="cycle_start">Cycle start</string>
   <string name="notifications_off">Notifications are off, so reminders cannot alert you.</string>
   <string name="turn_on">Turn on</string>
@@ -171,7 +179,7 @@
   <string name="birthday_time">Birthday reminder time</string>
   <string name="section_cycle">Cycle</string>
   <string name="cycle_tracking">Cycle tracking</string>
-  <string name="cycle_tracking_hint">Shades the days before the next expected start, based on the average of your last 3 regular cycles. Gaps from a forgotten entry or a doubled tap are skipped.</string>
+  <string name="cycle_tracking_hint">Shades the days before the next expected start, based on the average of your last 3 regular cycles (28 days until you have recorded one). Gaps from a forgotten entry or a doubled tap are skipped.</string>
   <string name="lead_days">Shaded days before the start</string>
   <string name="section_data">Import and export</string>
   <string name="import_file">Import .ics file</string>

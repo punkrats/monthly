@@ -18,10 +18,14 @@ stays on the phone unless you export it.
   previews the next alert on both clocks.
 - Reminders as notifications, exact to the minute, restored after reboot,
   time-zone change and app update
-- Cycle tracking: "Period started" marks the selected day (today by
-  default) in one tap. The next start is predicted from the average of the
-  last 3 regular cycle lengths; the 3 days before it are shaded light to
-  strong and the expected day gets a dashed ring. Lead days are adjustable.
+- Cycle tracking: the drop button in the bottom-left corner marks the
+  selected day (today by default) as a period start in one tap, or clears
+  it. On a day less than 15 days from a recorded start it asks whether to
+  move that start or begin a new cycle.
+- Forecast a year ahead from the average of the last 3 regular cycle
+  lengths, or 28 days until one cycle is recorded. A recorded start shows
+  a filled drop; an expected one a hollow drop and a dashed ring, with the
+  days before it shaded light to strong. Lead days are adjustable.
 - Regular cycles: at least 15 days and within 2/3 to 3/2 of your typical
   length (the median of your last 12 cycles). A forgotten start, which
   doubles a cycle, and a doubled tap are skipped; a late 40-day cycle
@@ -57,7 +61,7 @@ Requirements: JDK 21 and the Android SDK (platform 35, build tools 35).
 
 ```sh
 export JAVA_HOME=$(mise where java@temurin-21.0.13+9.0.LTS)
-./gradlew testDebugUnitTest   # logic, recurrence, time zones, iCalendar
+./gradlew testDebugUnitTest   # logic, iCalendar, storage, UI (Robolectric)
 ./gradlew lintDebug
 ./gradlew assembleRelease
 ```

@@ -2,14 +2,20 @@ package app.monthly.logic
 
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import kotlin.math.abs
 import kotlin.math.roundToInt
+
+/** Shorter gaps between starts come from a doubled tap. */
+private const val MIN_CYCLE_DAYS = 15
 
 /**
  * Expected cycle starts, spaced by the rounded average of the most recent
- * regular cycle lengths and counted from the last recorded start.
+ * regular cycle lengths and counted from the last recorded start. Without
+ * a regular cycle yet, [DEFAULT_LENGTH] is [assumed].
  */
 data class CycleForecast(
   val averageLength: Int,
+  val assumed: Boolean,
   val expected: List<LocalDate>
 ) {
 
@@ -28,26 +34,32 @@ data class CycleForecast(
 
   companion object {
 
-    /** Shorter gaps between starts come from a doubled tap. */
-    private const val MIN_CYCLE_DAYS = 15
-
     /** Cycles the typical length is taken from. */
     private const val TYPICAL_WINDOW = 12
 
+    /** Cycle length assumed until one regular cycle is recorded. */
+    const val DEFAULT_LENGTH = 28
+
+    /**
+     * Expected starts up to [until], inclusive, and at least the next one.
+     * Null without any recorded start.
+     */
     fun from(
       starts: Collection<LocalDate>,
-      window: Int = 3,
-      horizon: Int = 3
+      until: LocalDate,
+      window: Int = 3
     ): CycleForecast? {
       val sorted = starts.toSortedSet().toList()
+      val last = sorted.lastOrNull() ?: return null
       val lengths = sorted.zipWithNext { a, b -> ChronoUnit.DAYS.between(a, b) }
       val recent = regular(lengths).takeLast(window)
-      if (recent.isEmpty()) return null
 
-      val average = recent.average().roundToInt()
-      val last = sorted.last()
-      val expected = (1..horizon).map { last.plusDays(average * it.toLong()) }
-      return CycleForecast(average, expected)
+      val assumed = recent.isEmpty()
+      val average =
+        if (assumed) DEFAULT_LENGTH else recent.average().roundToInt()
+      val span = ChronoUnit.DAYS.between(last, until) / average
+      val expected = (1..maxOf(1, span)).map { last.plusDays(average * it) }
+      return CycleForecast(average, assumed, expected)
     }
 
     /**
@@ -80,4 +92,20 @@ fun cycleDayOf(
   val start = starts.filter { it <= day }.maxOrNull() ?: return null
   val number = ChronoUnit.DAYS.between(start, day).toInt() + 1
   return number.takeIf { it <= maxDays }
+}
+
+/**
+ * The recorded start closest to [day] and fewer than [MIN_CYCLE_DAYS] away,
+ * the later one on a tie. A new start that close would make a cycle too
+ * short to count, so the user may rather mean to move this one. Null when
+ * [day] is a start itself.
+ */
+fun nearbyStart(starts: Collection<LocalDate>, day: LocalDate): LocalDate? {
+  if (day in starts) return null
+
+  val gap = { start: LocalDate -> abs(ChronoUnit.DAYS.between(start, day)) }
+  return starts
+    .filter { gap(it) < MIN_CYCLE_DAYS }
+    .sortedDescending()
+    .minByOrNull(gap)
 }

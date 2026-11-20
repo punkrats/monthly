@@ -105,6 +105,18 @@ class Database(context: Context) :
     writableDatabase.delete("cycle_starts", "date = ?", arrayOf("$date"))
   }
 
+  fun moveCycleStart(from: LocalDate, to: LocalDate) {
+    val db = writableDatabase
+    db.beginTransaction()
+    try {
+      removeCycleStart(from)
+      addCycleStart(to)
+      db.setTransactionSuccessful()
+    } finally {
+      db.endTransaction()
+    }
+  }
+
   private fun idsByUid(db: SQLiteDatabase): Map<String, Long> =
     db.query("events", arrayOf("uid", "id"), null, null, null, null, null)
       .use { cursor ->

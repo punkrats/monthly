@@ -17,6 +17,7 @@ import app.monthly.ics.IcsImport
 import app.monthly.ics.IcsReader
 import app.monthly.ics.IcsWriter
 import app.monthly.logic.Occurrence
+import app.monthly.logic.nearbyStart
 import app.monthly.model.Event
 import app.monthly.model.EventKind
 import java.time.Instant
@@ -36,6 +37,9 @@ sealed interface Screen {
     val date: LocalDate
   ) : Screen
 }
+
+/** A recorded cycle start the user may move to another day. */
+data class CycleMove(val from: LocalDate, val to: LocalDate)
 
 /** A snackbar message, optionally with an undo action. */
 data class Notice(val text: String, val undo: (() -> Unit)? = null)
@@ -60,6 +64,7 @@ class AppViewModel(application: Application) :
   var selected by mutableStateOf(LocalDate.now())
   var detail by mutableStateOf<Occurrence?>(null)
   var pendingImport by mutableStateOf<IcsImport?>(null)
+  var pendingMove by mutableStateOf<CycleMove?>(null)
   var notice by mutableStateOf<Notice?>(null)
 
   val screens = mutableStateListOf<Screen>(Screen.Calendar)
@@ -121,6 +126,29 @@ class AppViewModel(application: Application) :
   }
 
   // Cycle
+
+  /**
+   * Clears [date] when it is a start, else marks it. Next to an existing
+   * start it asks first whether to move that one.
+   */
+  fun toggleCycleStart(date: LocalDate) {
+    val starts = cycleStarts.value
+    val near = nearbyStart(starts, date)
+    when {
+      date in starts -> setCycleStart(date, false)
+      near != null -> pendingMove = CycleMove(near, date)
+      else -> setCycleStart(date, true)
+    }
+  }
+
+  fun moveCycleStart(move: CycleMove) {
+    pendingMove = null
+    background { repository.moveCycleStart(move.from, move.to) }
+    val day = Format(app).dayMonth(move.to)
+    notice = Notice(app.getString(R.string.cycle_moved, day)) {
+      background { repository.moveCycleStart(move.to, move.from) }
+    }
+  }
 
   fun setCycleStart(date: LocalDate, started: Boolean) {
     background { repository.setCycleStart(date, started) }

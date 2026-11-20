@@ -47,13 +47,21 @@
   <string name="cycle_remove">Beginn entfernen</string>
   <string name="cycle_saved">Zyklusbeginn am %s gespeichert</string>
   <string name="cycle_removed">Zyklusbeginn am %s entfernt</string>
+  <string name="cycle_moved">Zyklusbeginn auf %s verschoben</string>
+  <string name="cycle_move_title">Zyklusbeginn verschieben?</string>
+  <string name="cycle_move_text">Ein Zyklus hat am %1$s begonnen. Diesen Beginn auf den %2$s verschieben oder einen neuen Zyklus beginnen?</string>
+  <string name="cycle_move">Verschieben</string>
+  <string name="cycle_new">Neuer Zyklus</string>
   <string name="cycle_day">Zyklustag %d</string>
   <string name="cycle_next">Nächster Beginn erwartet am %1$s (%2$s)</string>
   <plurals name="cycle_average">
     <item quantity="one">Durchschnitt %d Tag</item>
     <item quantity="other">Durchschnitt %d Tage</item>
   </plurals>
-  <string name="cycle_hint">Markiere einen weiteren Zyklusbeginn für eine Vorhersage</string>
+  <plurals name="cycle_assumed">
+    <item quantity="one">angenommen %d Tag</item>
+    <item quantity="other">angenommen %d Tage</item>
+  </plurals>
   <string name="cycle_start">Zyklusbeginn</string>
   <string name="notifications_off">Benachrichtigungen sind aus, Erinnerungen erreichen dich daher nicht.</string>
   <string name="turn_on">Einschalten</string>
@@ -169,7 +177,7 @@
   <string name="birthday_time">Uhrzeit für Geburtstagserinnerungen</string>
   <string name="section_cycle">Zyklus</string>
   <string name="cycle_tracking">Zyklus verfolgen</string>
-  <string name="cycle_tracking_hint">Schattiert die Tage vor dem nächsten erwarteten Beginn, berechnet aus dem Durchschnitt deiner letzten 3 regelmäßigen Zyklen. Lücken durch einen vergessenen Eintrag oder doppeltes Tippen werden übersprungen.</string>
+  <string name="cycle_tracking_hint">Schattiert die Tage vor dem nächsten erwarteten Beginn, berechnet aus dem Durchschnitt deiner letzten 3 regelmäßigen Zyklen (28 Tage, bis du einen erfasst hast). Lücken durch einen vergessenen Eintrag oder doppeltes Tippen werden übersprungen.</string>
   <string name="lead_days">Schattierte Tage vor dem Beginn</string>
   <string name="section_data">Import und Export</string>
   <string name="import_file">.ics-Datei importieren</string>

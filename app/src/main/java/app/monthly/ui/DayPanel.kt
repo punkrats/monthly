@@ -16,17 +16,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.outlined.Cake
 import androidx.compose.material.icons.outlined.NotificationsOff
-import androidx.compose.material.icons.outlined.WaterDrop
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -47,7 +42,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-/** The selected day: cycle button, forecast, and its entries. */
+/** The selected day: cycle day, forecast, and its entries. */
 @Composable
 fun DayPanel(model: AppViewModel, data: CalendarData, modifier: Modifier) {
   val format = rememberFormat()
@@ -92,23 +87,20 @@ private fun DayHeader(
   Column(
     Modifier
       .fillMaxWidth()
-      .padding(start = 20.dp, end = 12.dp, top = 12.dp, bottom = 4.dp)
+      .padding(horizontal = 20.dp)
+      .padding(top = 16.dp, bottom = 4.dp)
   ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-      Text(
-        format.weekday(day),
-        Modifier.weight(1f),
-        style = MaterialTheme.typography.titleMedium
-      )
-      if (data.cycleEnabled) CycleButton(model, day, day in data.starts)
-    }
+    Text(format.weekday(day), style = MaterialTheme.typography.titleMedium)
     cycleLine(data, day, format, model.today)?.let {
       Text(it, style = MaterialTheme.typography.bodySmall, color = cycleColor)
     }
   }
 }
 
-/** "Cycle day 12 · next start expected 3 Dec, average 28 days". */
+/**
+ * "Cycle day 12 · Next start expected 3 Dec (average 28 days)". The cycle
+ * day is known up to today only; later days belong to the forecast.
+ */
 @Composable
 private fun cycleLine(
   data: CalendarData,
@@ -119,47 +111,18 @@ private fun cycleLine(
   if (!data.cycleEnabled) return null
 
   val parts = mutableListOf<String>()
-  cycleDayOf(data.starts, day)?.let {
+  cycleDayOf(data.starts, day)?.takeIf { day <= today }?.let {
     parts += stringResource(R.string.cycle_day, it)
   }
-  val forecast = data.forecast
-  if (forecast != null) {
+  data.forecast?.let { forecast ->
     val next = forecast.expected.firstOrNull { it >= today }
-      ?: forecast.expected.first()
-    val average = format.plural(R.plurals.cycle_average, forecast.averageLength)
-    parts += stringResource(R.string.cycle_next, format.dayMonth(next), average)
-  } else if (data.starts.size == 1) {
-    parts += stringResource(R.string.cycle_hint)
+      ?: forecast.expected.last()
+    val basis =
+      if (forecast.assumed) R.plurals.cycle_assumed else R.plurals.cycle_average
+    val length = format.plural(basis, forecast.averageLength)
+    parts += stringResource(R.string.cycle_next, format.dayMonth(next), length)
   }
   return parts.joinToString(" · ").ifEmpty { null }
-}
-
-/** One tap marks the selected day (today by default) as a cycle start. */
-@Composable
-private fun CycleButton(model: AppViewModel, day: LocalDate, started: Boolean) {
-  val cycleColor = LocalCalendarColors.current.cycle
-  if (started) {
-    OutlinedButton(onClick = { model.setCycleStart(day, false) }) {
-      Icon(
-        Icons.Outlined.WaterDrop, null, Modifier.size(18.dp), tint = cycleColor
-      )
-      Spacer(Modifier.width(6.dp))
-      Text(stringResource(R.string.cycle_remove))
-    }
-    return
-  }
-
-  FilledTonalButton(
-    onClick = { model.setCycleStart(day, true) },
-    enabled = day <= model.today,
-    colors = ButtonDefaults.filledTonalButtonColors(
-      containerColor = cycleColor.copy(alpha = 0.18f)
-    )
-  ) {
-    Icon(Icons.Filled.WaterDrop, null, Modifier.size(18.dp), tint = cycleColor)
-    Spacer(Modifier.width(6.dp))
-    Text(stringResource(R.string.cycle_started))
-  }
 }
 
 @Composable

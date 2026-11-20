@@ -1,5 +1,10 @@
 package app.monthly.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,18 +25,24 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.FormatColorReset
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.outlined.Cake
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Today
+import androidx.compose.material.icons.outlined.WaterDrop
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -104,9 +115,11 @@ fun CalendarScreen(model: AppViewModel) {
 
   val weekStart = settings.weekStart
     ?: WeekFields.of(format.locale).firstDayOfWeek
-  val data = remember(events, cycle, settings, weekStart) {
+  val today = model.today
+  val data = remember(events, cycle, settings, weekStart, today) {
+    val until = today.plusYears(1)
     val forecast =
-      if (settings.cycleEnabled) CycleForecast.from(cycle) else null
+      if (settings.cycleEnabled) CycleForecast.from(cycle, until) else null
     CalendarData(
       events, cycle.toSet(), forecast, settings.cycleEnabled,
       settings.leadDays, weekStart
@@ -155,12 +168,24 @@ fun CalendarScreen(model: AppViewModel) {
         }
       )
     },
+
+    // One full-width row puts the cycle button in the bottom-left corner
+    // and the plus in the bottom-right, on the same baseline.
     floatingActionButton = {
-      val editor = Screen.Editor(null, EventKind.EVENT, model.selected)
-      FloatingActionButton(onClick = { model.open(editor) }) {
-        Icon(Icons.Filled.Add, stringResource(R.string.new_event))
+      Row(
+        Modifier
+          .fillMaxWidth()
+          .padding(horizontal = 16.dp)
+      ) {
+        if (data.cycleEnabled) CycleButton(model, data.starts)
+        Spacer(Modifier.weight(1f))
+        val editor = Screen.Editor(null, EventKind.EVENT, model.selected)
+        FloatingActionButton(onClick = { model.open(editor) }) {
+          Icon(Icons.Filled.Add, stringResource(R.string.new_event))
+        }
       }
-    }
+    },
+    floatingActionButtonPosition = FabPosition.Center
   ) { padding ->
     Column(
       Modifier
@@ -178,6 +203,69 @@ fun CalendarScreen(model: AppViewModel) {
       DayPanel(model, data, Modifier.weight(1f))
     }
   }
+
+  model.pendingMove?.let { CycleMoveDialog(model, it) }
+}
+
+/**
+ * Marks the selected day as a cycle start, or clears it when it is one;
+ * the icon shows which. Hidden on days after today.
+ */
+@Composable
+private fun CycleButton(model: AppViewModel, starts: Set<LocalDate>) {
+  val day = model.selected
+  val started = day in starts
+  val icon =
+    if (started) Icons.Filled.FormatColorReset else Icons.Filled.WaterDrop
+  val label = if (started) R.string.cycle_remove else R.string.cycle_started
+
+  AnimatedVisibility(
+    day <= model.today,
+    enter = scaleIn() + fadeIn(),
+    exit = scaleOut() + fadeOut()
+  ) {
+    FloatingActionButton(
+      onClick = { model.toggleCycleStart(day) },
+      containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+      contentColor = LocalCalendarColors.current.cycle,
+      elevation = FloatingActionButtonDefaults.loweredElevation()
+    ) {
+      Icon(icon, stringResource(label))
+    }
+  }
+}
+
+/** A start marked close to another: move that one, or begin a new cycle. */
+@Composable
+private fun CycleMoveDialog(model: AppViewModel, move: CycleMove) {
+  val format = rememberFormat()
+  val from = format.dayMonth(move.from)
+  val to = format.dayMonth(move.to)
+  val close = { model.pendingMove = null }
+
+  AlertDialog(
+    onDismissRequest = close,
+    title = { Text(stringResource(R.string.cycle_move_title)) },
+    text = { Text(stringResource(R.string.cycle_move_text, from, to)) },
+    confirmButton = {
+      TextButton(onClick = { model.moveCycleStart(move) }) {
+        Text(stringResource(R.string.cycle_move))
+      }
+    },
+    dismissButton = {
+      Row {
+        TextButton(onClick = close) {
+          Text(stringResource(R.string.cancel))
+        }
+        TextButton(onClick = {
+          close()
+          model.setCycleStart(move.to, true)
+        }) {
+          Text(stringResource(R.string.cycle_new))
+        }
+      }
+    }
+  )
 }
 
 private fun pageOf(base: YearMonth, month: YearMonth) =
@@ -252,12 +340,19 @@ private fun DayCell(
     if (level > 0) colors.cycleShade(level, strongest) else Color.Transparent
   val selected = day == model.selected
   val started = day in data.starts
-  val description = cellDescription(
-    format, day, occurrences.size, started, level == strongest
-  )
+  val expected = level == strongest
+  val description =
+    cellDescription(format, day, occurrences.size, started, expected)
 
+  // Recorded starts show a filled drop; forecasts a hollow one and a
+  // dashed ring.
+  val drop = when {
+    started -> Icons.Filled.WaterDrop
+    expected -> Icons.Outlined.WaterDrop
+    else -> null
+  }
   val expectedRing =
-    if (level == strongest) Modifier.dashedBorder(colors.cycle) else Modifier
+    if (expected) Modifier.dashedBorder(colors.cycle) else Modifier
   val border = Modifier.border(2.dp, scheme.primary, CELL_SHAPE)
   val selectedRing = if (selected) border else Modifier
 
@@ -278,11 +373,9 @@ private fun DayCell(
       Row(verticalAlignment = Alignment.CenterVertically) {
         DayNumber(day, day == model.today, fade)
         Spacer(Modifier.weight(1f))
-        if (started) {
-          Icon(
-            Icons.Filled.WaterDrop, null,
-            Modifier.size(12.dp), tint = colors.cycle.copy(alpha = fade)
-          )
+        drop?.let {
+          val tint = colors.cycle.copy(alpha = fade)
+          Icon(it, null, Modifier.size(12.dp), tint = tint)
         }
       }
 
